@@ -18,9 +18,10 @@ export async function gongApiRequest(
 	query: IDataObject = {},
 ) {
 	const authentication = this.getNodeParameter('authentication', 0) as 'accessToken' | 'oAuth2';
+	const credentialsType = authentication === 'oAuth2' ? 'gongOAuth2Api' : 'gongApi';
 	const { baseUrl } = await this.getCredentials<{
 		baseUrl: string;
-	}>(authentication);
+	}>(credentialsType);
 
 	const options: IHttpRequestOptions = {
 		method,
@@ -37,7 +38,7 @@ export async function gongApiRequest(
 		delete options.body;
 	}
 
-	return await this.helpers.requestWithAuthentication.call(this, authentication, options);
+	return await this.helpers.requestWithAuthentication.call(this, credentialsType, options);
 }
 
 export async function gongApiPaginateRequest(
@@ -50,9 +51,10 @@ export async function gongApiPaginateRequest(
 	rootProperty: string | undefined = undefined,
 ): Promise<any> {
 	const authentication = this.getNodeParameter('authentication', 0) as 'accessToken' | 'oAuth2';
+	const credentialsType = authentication === 'oAuth2' ? 'gongOAuth2Api' : 'gongApi';
 	const { baseUrl } = await this.getCredentials<{
 		baseUrl: string;
-	}>(authentication);
+	}>(credentialsType);
 
 	const options: IHttpRequestOptions = {
 		method,
@@ -83,7 +85,7 @@ export async function gongApiPaginateRequest(
 				url: options.url,
 			},
 		},
-		authentication,
+		credentialsType,
 	);
 
 	if (rootProperty) {
