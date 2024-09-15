@@ -17,9 +17,14 @@ export async function gongApiRequest(
 	body: IDataObject = {},
 	query: IDataObject = {},
 ) {
+	const authentication = this.getNodeParameter('authentication', 0) as 'accessToken' | 'oAuth2';
+	const { baseUrl } = await this.getCredentials<{
+		baseUrl: string;
+	}>(authentication);
+
 	const options: IHttpRequestOptions = {
 		method,
-		url: `https://api.gong.io${endpoint}`,
+		url: `${baseUrl.replace(new RegExp('/$'), '')}/${endpoint}`,
 		json: true,
 		headers: {
 			'Content-Type': 'application/json',
@@ -32,7 +37,7 @@ export async function gongApiRequest(
 		delete options.body;
 	}
 
-	return await this.helpers.requestWithAuthentication.call(this, 'gongApi', options);
+	return await this.helpers.requestWithAuthentication.call(this, authentication, options);
 }
 
 export async function gongApiPaginateRequest(
@@ -44,9 +49,14 @@ export async function gongApiPaginateRequest(
 	itemIndex: number = 0,
 	rootProperty: string | undefined = undefined,
 ): Promise<any> {
+	const authentication = this.getNodeParameter('authentication', 0) as 'accessToken' | 'oAuth2';
+	const { baseUrl } = await this.getCredentials<{
+		baseUrl: string;
+	}>(authentication);
+
 	const options: IHttpRequestOptions = {
 		method,
-		url: `https://api.gong.io${endpoint}`,
+		url: `${baseUrl.replace(new RegExp('/$'), '')}/${endpoint}`,
 		json: true,
 		headers: {
 			'Content-Type': 'application/json',
@@ -73,7 +83,7 @@ export async function gongApiPaginateRequest(
 				url: options.url,
 			},
 		},
-		'gongApi',
+		authentication,
 	);
 
 	if (rootProperty) {
