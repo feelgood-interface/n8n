@@ -167,6 +167,8 @@ export function WorkflowExecuteAdditionalData(
 	return mock<IWorkflowExecuteAdditionalData>({
 		credentialsHelper: new CredentialsHelper(),
 		hooks: new WorkflowHooks(hookFunctions, 'trigger', '1', mock()),
+		// Get from node.parameters
+		currentNodeParameters: undefined,
 	});
 }
 

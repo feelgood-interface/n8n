@@ -54,6 +54,11 @@ BQIDAQAB
 	airtableApi: {
 		apiKey: 'key123',
 	},
+	gongApi: {
+		baseUrl: 'https://api.gong.io',
+		accessKey: 'accessKey123',
+		accessKeySecret: 'accessKeySecret123',
+	},
 	n8nApi: {
 		apiKey: 'key123',
 		baseUrl: 'https://test.app.n8n.cloud/api/v1',

@@ -25,7 +25,7 @@ export async function gongApiRequest(
 
 	const options: IHttpRequestOptions = {
 		method,
-		url: `${baseUrl.replace(new RegExp('/$'), '')}/${endpoint}`,
+		url: baseUrl.replace(new RegExp('/$'), '') + endpoint,
 		json: true,
 		headers: {
 			'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export async function gongApiPaginateRequest(
 
 	const options: IHttpRequestOptions = {
 		method,
-		url: `${baseUrl.replace(new RegExp('/$'), '')}/${endpoint}`,
+		url: baseUrl.replace(new RegExp('/$'), '') + endpoint,
 		json: true,
 		headers: {
 			'Content-Type': 'application/json',
@@ -79,9 +79,8 @@ export async function gongApiPaginateRequest(
 			requestInterval: 340, // Rate limit 3 calls per second
 			continue: '={{ $response.body.records.cursor }}',
 			request: {
-				[method === 'POST' ? 'body' : 'qs']: {
-					cursor: '={{ $response.body?.records.cursor ?? "" }}',
-				},
+				[method === 'POST' ? 'body' : 'qs']:
+					'={{ $if($response.body?.records.cursor, { cursor: $response.body.records.cursor }, {}) }}',
 				url: options.url,
 			},
 		},
